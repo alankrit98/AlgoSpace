@@ -151,7 +151,14 @@ export default function Pathfinding() {
     const visitedNodesInOrder = algorithm === "bfs" 
       ? bfs(gridCopy, startNode, finishNode)
       : dfs(gridCopy, startNode, finishNode);
-      
+
+    // Check if the finish node was actually found!
+    const finishNodeTarget = visitedNodesInOrder[visitedNodesInOrder.length - 1];
+    if (finishNodeTarget !== finishNode) {
+       // If the last node it checked wasn't the finish node, it failed to find a path.
+       setTimeout(() => alert("No path possible!"), 10 * visitedNodesInOrder.length);
+    }
+
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
 
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
