@@ -19,11 +19,11 @@ export default function App() {
   const [historyLog, setHistoryLog] = useState([]);
   const [algorithm, setAlgorithm] = useState("bubble");
 
-  // NEW: Analytics State
+  // Analytics State
   const [comparisons, setComparisons] = useState(0);
   const [swaps, setSwaps] = useState(0);
 
-  // NEW: Debugger Mode State and Refs
+  // Debugger Mode State and Refs
   const [isManualMode, setIsManualMode] = useState(false);
   const isManualModeRef = useRef(false);
   const delayRef = useRef(delay);
@@ -121,7 +121,7 @@ export default function App() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950 p-4 font-sans text-white">
       <h1 className="text-3xl font-bold mb-6">Algorithm Visualizer</h1>
       
-      {/* NEW: Analytics Dashboard */}
+      {/* Analytics Dashboard */}
       <div className="flex flex-wrap items-center justify-between bg-slate-900 border border-slate-700 w-full max-w-5xl p-4 rounded-lg mb-8 shadow-md text-sm sm:text-base">
         <div className="flex gap-6 text-slate-300">
           <p><span className="text-slate-500 font-bold">Avg Time:</span> <span className="text-emerald-400 font-mono">{complexities[algorithm].time}</span></p>
@@ -184,7 +184,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* NEW: Debugger & Speed Controls */}
+          {/* Debugger & Speed Controls */}
           <div className="flex flex-col gap-4 pt-4 border-t border-slate-800">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-slate-400 flex items-center gap-2 cursor-pointer">
