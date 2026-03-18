@@ -71,9 +71,11 @@ npm run dev
 The application will be available at http://localhost:5173.
 ```
 
-👨‍💻 Author
-[Alankrit Agarwal](https://www.linkedin.com/in/alankrit-agarwal)
+---
 
+## 👨‍💻 Author
+
+[Alankrit Agarwal](https://www.linkedin.com/in/alankrit-agarwal)
 Full-Stack Developer
 
 If you found this project helpful for understanding CS concepts, feel free to star the repository!
