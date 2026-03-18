@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { bfs, dfs, getNodesInShortestPathOrder } from '../utils/pathfinding';
+import { bfs, dfs, astar, getNodesInShortestPathOrder } from '../utils/pathfinding';
 import { generateRandomMaze } from '../utils/maze';
 
 const ROWS = 20;
@@ -10,6 +10,7 @@ export default function Pathfinding() {
   const [mouseMode, setMouseMode] = useState("idle"); // "wall", "start", "finish", or "idle"
   const [isRunning, setIsRunning] = useState(false);
   const [algorithm, setAlgorithm] = useState("bfs");
+  const [brushMode, setBrushMode] = useState("wall"); // "wall" or "mud"
 
   // Dynamic state for Start and Finish nodes
   const [startPos, setStartPos] = useState({ row: 10, col: 5 });
@@ -25,12 +26,14 @@ export default function Pathfinding() {
       const currentRow = [];
       for (let col = 0; col < COLS; col++) {
         const isWall = preserveWalls && grid.length > 0 ? grid[row][col].isWall : false;
+        const isMud = preserveWalls && grid.length > 0 ? grid[row][col].isMud : false;
         currentRow.push({
           col,
           row,
           isStart: row === startPos.row && col === startPos.col,
           isFinish: row === finishPos.row && col === finishPos.col,
           isWall: isWall,
+          isMud: isMud,
           isVisited: false,
           previousNode: null,
         });
@@ -47,7 +50,8 @@ export default function Pathfinding() {
           const isStart = row === startPos.row && col === startPos.col;
           const isFinish = row === finishPos.row && col === finishPos.col;
           const isWall = preserveWalls && grid.length > 0 ? grid[row][col].isWall : false;
-          node.className = getInitialNodeClasses({ isStart, isFinish, isWall });
+          const isMud = preserveWalls && grid.length > 0 ? grid[row][col].isMud : false;
+          node.className = getInitialNodeClasses({ isStart, isFinish, isWall, isMud });
         }
       }
     }
@@ -58,6 +62,7 @@ export default function Pathfinding() {
     if (node.isStart) return base + "bg-emerald-500 scale-110 shadow-lg shadow-emerald-500/50 z-10 hover:scale-125";
     if (node.isFinish) return base + "bg-rose-500 scale-110 shadow-lg shadow-rose-500/50 z-10 hover:scale-125";
     if (node.isWall) return base + "bg-slate-300 scale-105";
+    if (node.isMud) return base + "bg-amber-900 scale-100 opacity-80 border border-amber-700/50";
     return base + "bg-slate-800 hover:bg-slate-700"; 
   };
 
@@ -70,8 +75,8 @@ export default function Pathfinding() {
     } else if (row === finishPos.row && col === finishPos.col) {
       setMouseMode("finish");
     } else {
-      setMouseMode("wall");
-      setGrid(toggleWall(grid, row, col));
+      setMouseMode("drawing");
+      setGrid(applyBrush(grid, row, col));
     }
   };
 
@@ -82,18 +87,27 @@ export default function Pathfinding() {
       setStartPos({ row, col });
     } else if (mouseMode === "finish") {
       setFinishPos({ row, col });
-    } else if (mouseMode === "wall") {
-      setGrid(toggleWall(grid, row, col));
+    } else if (mouseMode === "drawing") {
+      setGrid(applyBrush(grid, row, col));
     }
   };
 
   const handleMouseUp = () => setMouseMode("idle");
 
-  const toggleWall = (currentGrid, row, col) => {
+  const applyBrush = (currentGrid, row, col) => {
     const newGrid = currentGrid.slice();
     const node = newGrid[row][col];
     if (node.isStart || node.isFinish) return newGrid;
-    newGrid[row][col] = { ...node, isWall: !node.isWall };
+    
+    const newNode = { ...node };
+    if (brushMode === "wall") {
+      newNode.isWall = !node.isWall;
+      newNode.isMud = false; // Erase mud if drawing wall
+    } else {
+      newNode.isMud = !node.isMud;
+      newNode.isWall = false; // Erase wall if drawing mud
+    }
+    newGrid[row][col] = newNode;
     return newGrid;
   };
 
@@ -148,9 +162,9 @@ export default function Pathfinding() {
     const finishNode = gridCopy[finishPos.row][finishPos.col];
     
     // Switchboard for algorithms
-    const visitedNodesInOrder = algorithm === "bfs" 
-      ? bfs(gridCopy, startNode, finishNode)
-      : dfs(gridCopy, startNode, finishNode);
+    const visitedNodesInOrder = algorithm === "bfs" ? bfs(gridCopy, startNode, finishNode) :
+      algorithm === "dfs" ? dfs(gridCopy, startNode, finishNode) :
+      astar(gridCopy, startNode, finishNode);
 
     // Check if the finish node was actually found!
     const finishNodeTarget = visitedNodesInOrder[visitedNodesInOrder.length - 1];
@@ -171,12 +185,14 @@ export default function Pathfinding() {
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
         if (!node.isStart && !node.isFinish) {
+          const flashColor = node.isMud ? "bg-amber-600" : "bg-cyan-500";
+          const settleColor = node.isMud ? "bg-amber-800" : "bg-cyan-800";
           document.getElementById(`node-${node.row}-${node.col}`).className = 
-            "w-4 h-4 sm:w-5 sm:h-5 m-[1px] rounded-full bg-cyan-500 scale-125 transition-all duration-500 ease-out";
+            `w-4 h-4 sm:w-5 sm:h-5 m-[1px] rounded-full ${flashColor} scale-125 transition-all duration-500 ease-out`;
             
           setTimeout(() => {
              const el = document.getElementById(`node-${node.row}-${node.col}`);
-             if(el) el.className = "w-4 h-4 sm:w-5 sm:h-5 m-[1px] rounded-sm bg-cyan-800 transition-all duration-1000";
+             if(el) el.className = `w-4 h-4 sm:w-5 sm:h-5 m-[1px] rounded-sm border border-slate-900/20 ${settleColor} transition-all duration-1000`;
           }, 300);
         }
       }, 10 * i); 
@@ -191,21 +207,24 @@ export default function Pathfinding() {
           <p className="text-slate-400 mt-1">Drag nodes, draw walls, or generate a maze.</p>
         </div>
         
-        <div className="flex flex-wrap gap-4">
-          <button 
-            onClick={() => initializeGrid(false)}
-            disabled={isRunning}
-            className="px-4 py-2 bg-slate-800 rounded-md hover:bg-slate-700 transition font-medium border border-slate-700 disabled:opacity-50"
-          >
-            Clear Board
-          </button>
-          <button 
-            onClick={animateMaze}
-            disabled={isRunning}
-            className="px-4 py-2 bg-slate-800 rounded-md hover:bg-slate-700 transition font-medium border border-slate-700 disabled:opacity-50"
-          >
-            Generate Maze
-          </button>
+        <div className="flex flex-wrap gap-4 items-center">
+          {/* BRUSH TOGGLE */}
+          <div className="flex bg-slate-900 border border-slate-700 rounded-md p-1">
+            <button 
+              onClick={() => setBrushMode("wall")}
+              className={`px-3 py-1 text-sm font-bold rounded ${brushMode === "wall" ? "bg-slate-700 text-white" : "text-slate-500 hover:text-slate-300"}`}
+            >
+              Draw Wall
+            </button>
+            <button 
+              onClick={() => setBrushMode("mud")}
+              className={`px-3 py-1 text-sm font-bold rounded flex items-center gap-1 ${brushMode === "mud" ? "bg-amber-900/50 text-amber-500" : "text-slate-500 hover:text-slate-300"}`}
+            >
+              Draw Mud (Weight 5)
+            </button>
+          </div>
+          
+          <button onClick={() => initializeGrid(false)} disabled={isRunning} className="px-4 py-2 bg-slate-800 rounded-md hover:bg-slate-700 transition font-medium border border-slate-700 disabled:opacity-50">Clear</button>
           
           <div className="flex gap-2">
             <select 
@@ -216,6 +235,7 @@ export default function Pathfinding() {
             >
               <option value="bfs">Breadth-First Search</option>
               <option value="dfs">Depth-First Search</option>
+              <option value="astar">A* Search (Weighted)</option>
             </select>
             <button 
               onClick={runPathfinder}
