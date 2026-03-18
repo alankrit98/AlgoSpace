@@ -51,6 +51,13 @@ export default function Home() {
       color: "from-green-400 to-green-600",
       icon: "🔍"
     },
+    {
+      title: "String Searching (KMP)",
+      desc: "Visualize the KMP algorithm's efficient pattern searching with LPS array insights.",
+      path: "/strings",
+      color: "from-cyan-400 to-blue-500",
+      icon: "🔤"
+    },
   ];
 
   return (

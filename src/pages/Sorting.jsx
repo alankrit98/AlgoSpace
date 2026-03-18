@@ -250,7 +250,7 @@ export default function App() {
             </span>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-4 space-y-2 font-mono text-sm text-slate-300">
+          <div className="flex-1 overflow-y-auto p-4 space-y-2 font-mono text-sm text-slate-300 no-scrollbar">
             {historyLog.map((log, index) => (
               <div 
                 key={index} 

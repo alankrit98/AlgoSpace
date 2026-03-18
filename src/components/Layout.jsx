@@ -11,6 +11,7 @@ export default function Layout() {
     { name: 'CPU Scheduling (OS)', path: '/os' },
     { name: 'Memory Management (OS)', path: '/os-memory' },
     { name: 'Clustering (Machine Learning)', path: '/ml' },
+    { name: 'String Searching (KMP)', path: '/strings' },
   ];
 
   return (
@@ -22,7 +23,7 @@ export default function Layout() {
           <p className="text-xs text-slate-500 mt-1">Interactive CS Library</p>
         </div>
         
-        <div className="flex-1 p-4 flex flex-col gap-2">
+        <div className="flex-1 p-4 flex flex-col gap-2 overflow-y-auto pb-8 no-scrollbar">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -43,7 +44,7 @@ export default function Layout() {
       </nav>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto no-scrollbar">
         {/* The Outlet is where your specific pages (Sorting, OS, etc.) will render */}
         <Outlet /> 
       </main>

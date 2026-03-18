@@ -8,6 +8,7 @@ import DataStructures from './pages/DataStructures';
 import MachineLearning from './pages/MachineLearning';
 import MemoryManagement from './pages/MemoryManagement';
 import Backtracking from './pages/Backtracking';
+import StringMatching from './pages/StringMatching';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="ml" element={<MachineLearning />} />
           <Route path="os-memory" element={<MemoryManagement />} />
           <Route path="backtracking" element={<Backtracking />} />
+          <Route path="strings" element={<StringMatching />} />
         </Route>
       </Routes>
     </BrowserRouter>
