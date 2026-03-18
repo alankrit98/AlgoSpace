@@ -4,10 +4,12 @@ export default function Layout() {
   const location = useLocation();
 
   const navItems = [
-    { name: 'Sorting Algorithms', path: '/' },
+    { name: 'Home / Dashboard', path: '/' }, // Added Home
+    { name: 'Sorting Algorithms', path: '/sorting' }, // Updated Path
     { name: 'Pathfinding (Graphs)', path: '/graphs' },
     { name: 'CPU Scheduling (OS)', path: '/os' },
     { name: 'Trees (Data Structures)', path: '/trees' },
+    { name: 'Clustering (Machine Learning)', path: '/ml' },
   ];
 
   return (
