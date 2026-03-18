@@ -7,6 +7,7 @@ export default function Layout() {
     { name: 'Sorting Algorithms', path: '/' },
     { name: 'Pathfinding (Graphs)', path: '/graphs' },
     { name: 'CPU Scheduling (OS)', path: '/os' },
+    { name: 'Trees (Data Structures)', path: '/trees' },
   ];
 
   return (

@@ -3,6 +3,7 @@ import Layout from './components/Layout';
 import Sorting from './pages/Sorting';
 import Pathfinding from './pages/Pathfinding';
 import OsScheduling from './pages/OsScheduling';
+import DataStructures from './pages/DataStructures';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
           <Route index element={<Sorting />} />
           <Route path="graphs" element={<Pathfinding />} />
           <Route path="os" element={<OsScheduling />} />
+          <Route path="trees" element={<DataStructures />} />
         </Route>
       </Routes>
     </BrowserRouter>
