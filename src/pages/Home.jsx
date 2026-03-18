@@ -36,7 +36,21 @@ export default function Home() {
       path: "/ml",
       color: "from-amber-400 to-yellow-500",
       icon: "🤖"
-    }
+    },
+    {
+      title: "Memory Mgmt (OS)",
+      desc: "Visualize how RAM handles Page Faults using LRU and FIFO algorithms.",
+      path: "/os-memory",
+      color: "from-fuchsia-500 to-pink-500",
+      icon: "💾"
+    },
+    {
+      title: "Backtracking (Logic)",
+      desc: "Step through the recursive N-Queens puzzle and see the backtracking process unfold.",
+      path: "/backtracking",
+      color: "from-green-400 to-green-600",
+      icon: "🔍"
+    },
   ];
 
   return (

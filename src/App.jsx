@@ -6,6 +6,8 @@ import Pathfinding from './pages/Pathfinding';
 import OsScheduling from './pages/OsScheduling';
 import DataStructures from './pages/DataStructures';
 import MachineLearning from './pages/MachineLearning';
+import MemoryManagement from './pages/MemoryManagement';
+import Backtracking from './pages/Backtracking';
 
 export default function App() {
   return (
@@ -18,6 +20,8 @@ export default function App() {
           <Route path="os" element={<OsScheduling />} />
           <Route path="trees" element={<DataStructures />} />
           <Route path="ml" element={<MachineLearning />} />
+          <Route path="os-memory" element={<MemoryManagement />} />
+          <Route path="backtracking" element={<Backtracking />} />
         </Route>
       </Routes>
     </BrowserRouter>

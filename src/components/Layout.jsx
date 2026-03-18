@@ -4,11 +4,12 @@ export default function Layout() {
   const location = useLocation();
 
   const navItems = [
-    { name: 'Home / Dashboard', path: '/' }, // Added Home
     { name: 'Sorting Algorithms', path: '/sorting' }, // Updated Path
+    { name: 'Trees (Data Structures)', path: '/trees' },
+    { name: 'Backtracking (Logic)', path: '/backtracking' },
     { name: 'Pathfinding (Graphs)', path: '/graphs' },
     { name: 'CPU Scheduling (OS)', path: '/os' },
-    { name: 'Trees (Data Structures)', path: '/trees' },
+    { name: 'Memory Management (OS)', path: '/os-memory' },
     { name: 'Clustering (Machine Learning)', path: '/ml' },
   ];
 
@@ -17,7 +18,7 @@ export default function Layout() {
       {/* Sidebar Navigation */}
       <nav className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
         <div className="p-6 border-b border-slate-800">
-          <h1 className="text-xl font-bold text-emerald-400">AlgoSpace</h1>
+          <a href="/"><h1 className="text-xl font-bold text-emerald-400">AlgoSpace</h1></a>
           <p className="text-xs text-slate-500 mt-1">Interactive CS Library</p>
         </div>
         
