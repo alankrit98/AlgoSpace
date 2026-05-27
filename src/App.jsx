@@ -9,6 +9,7 @@ import MachineLearning from './pages/MachineLearning';
 import MemoryManagement from './pages/MemoryManagement';
 import Backtracking from './pages/Backtracking';
 import StringMatching from './pages/StringMatching';
+import AiVisualizer from './pages/AiVisualizer';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="os-memory" element={<MemoryManagement />} />
           <Route path="backtracking" element={<Backtracking />} />
           <Route path="strings" element={<StringMatching />} />
+          <Route path="linked-list" element={<AiVisualizer />} />
         </Route>
       </Routes>
     </BrowserRouter>

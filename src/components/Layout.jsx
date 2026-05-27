@@ -12,6 +12,7 @@ export default function Layout() {
     { name: 'Memory Management (OS)', path: '/os-memory' },
     { name: 'Clustering (Machine Learning)', path: '/ml' },
     { name: 'String Searching (KMP)', path: '/strings' },
+    { name: 'LinkedList Visualization', path: '/linked-list' },
   ];
 
   return (
