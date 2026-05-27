@@ -40,6 +40,8 @@ AlgoSpace currently features 8 distinct mathematical and algorithmic engines:
    - Visualizes both **Least Recently Used (LRU)** and **First-In, First-Out (FIFO)** page replacement algorithms.
 8. **Sorting Algorithms**
    - Real-time visual comparison of Time & Space complexity using **Merge Sort**, **Quick Sort**, and **Bubble Sort** on randomized arrays.
+9. **LinkedList Visualization**
+   - Visualize the linkedlist concepts to understand the flow of algorithms in a step-wise procedure.
 
 ---
 
@@ -49,6 +51,11 @@ AlgoSpace currently features 8 distinct mathematical and algorithmic engines:
 - **Optimized Rendering:** Utilized direct DOM manipulation (`document.getElementById`) for heavy graph animations (like A* Pathfinding) to prevent React state batching from crashing the browser during massive `while` loops.
 - **Dynamic SVG Generation:** Engineered custom math to recursively calculate non-overlapping horizontal spacing `(400 / 2^level)` for perfect tree branch rendering at any depth.
 - **Custom CSS Animations:** Implemented `.no-scrollbar` utilities and `scale-in` keyframes to ensure a premium, sleek dark-mode aesthetic across all viewports.
+- **Semantic AI Flow Analysis:** Using Gemini to parse arbitrary code and map it to a visual state.
+- **Dynamic SVG Rendering:** Mathematically tracking coordinates, nodes, and curved directional arrows.
+- **Memory Management (Garbage Collection):** A literal Mark & Sweep algorithm built into React state that visually fades isolated nodes.
+- **Cinematic VCR Scrubber:** A built-in interval engine for automated playback.
+- **Enterprise UI/UX:** Framer Motion staggered cascades and page-routing transitions.
 
 ---
 

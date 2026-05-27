@@ -1,5 +1,27 @@
 import { useState } from 'react';
 import { analyzeAlgorithmLogic } from '../utils/aiParser';
+import { motion } from 'framer-motion';
+
+// --- GAMIFICATION LEVELS ---
+const CHALLENGES = {
+  sandbox: {
+    title: "Sandbox Mode",
+    goal: "Write any code and visualize it freely.",
+    startingState: "standard",
+    defaultCode: `def demo(head):\n    # Welcome to the Sandbox!\n    # Write your algorithms here.\n    pass`,
+    checkWinCondition: () => false // Sandbox has no win condition
+  },
+  level1: {
+    title: "Level 1: The Missing Link",
+    goal: "Fix the code so that node1 skips node2 and points directly to node3.",
+    startingState: "standard",
+    defaultCode: `def skipNode(head):\n    # BUG: This code is broken. Fix it!\n    head.next = head\n    \n    return head`,
+    // Win Condition: The timeline must contain an action where source is node1 and target is node3
+    checkWinCondition: (timeline) => {
+      return timeline.some(step => step.action === "CHANGE_LINK" && step.source_node === "node1" && step.target_node === "node3");
+    }
+  }
+};
 
 const defaultCode = `def swapPairs(head):
     dummy = ListNode(0)
@@ -26,6 +48,8 @@ export default function AiVisualizer() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [startingState, setStartingState] = useState("standard");
+  const [activeChallenge, setActiveChallenge] = useState("sandbox");
+  const [hasWon, setHasWon] = useState(false);
 
   const handleAnalyze = async () => {
     if (!code.trim()) return;
@@ -33,11 +57,19 @@ export default function AiVisualizer() {
     setError("");
     setTimeline([]);
     setCurrentStep(-1);
+    setHasWon(false);
 
     try {
       const data = await analyzeAlgorithmLogic(code, startingState);
       if (data && data.execution_timeline) {
         setTimeline(data.execution_timeline);
+        // CHECK WIN CONDITION
+      const challenge = CHALLENGES[activeChallenge];
+      if (challenge.checkWinCondition(data.execution_timeline)) {
+        setHasWon(true);
+      } else {
+        setHasWon(false);
+      }
         setCurrentStep(0);
       }
     } catch (err) {
@@ -202,6 +234,47 @@ export default function AiVisualizer() {
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-6 h-[700px]">
         {/* Editor */}
         <div className="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col h-full">
+        {/* --- GAMIFICATION DASHBOARD --- */}
+          <div className="flex flex-col mb-6 bg-slate-900 border border-slate-700 rounded-lg p-4 shadow-lg relative overflow-hidden">
+            
+            {/* SUCCESS BANNER OVERLAY */}
+            {hasWon && (
+              <div className="absolute inset-0 bg-emerald-500/20 backdrop-blur-sm border-2 border-emerald-400 flex items-center justify-center z-10 transition-all duration-500">
+                <div className="bg-slate-950 px-6 py-3 rounded-full border border-emerald-500 shadow-xl shadow-emerald-500/30 flex items-center gap-3">
+                  <span className="text-2xl">🏆</span>
+                  <span className="font-bold text-emerald-400 text-lg">Level Complete!</span>
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-wrap justify-between items-center gap-3 mb-3">
+              <select 
+                value={activeChallenge}
+                onChange={(e) => {
+                  const levelId = e.target.value;
+                  setActiveChallenge(levelId);
+                  setCode(CHALLENGES[levelId].defaultCode);
+                  setStartingState(CHALLENGES[levelId].startingState);
+                  setTimeline([]);
+                  setCurrentStep(-1);
+                  setHasWon(false);
+                }}
+                className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded px-3 py-1.5 outline-none cursor-pointer transition-colors"
+              >
+                <option value="sandbox">Creative: Sandbox Mode</option>
+                <option value="level1">Level 1: The Missing Link</option>
+              </select>
+              
+              <span className="text-xs font-mono text-slate-400">
+                {activeChallenge === "sandbox" ? "Free Play" : "Challenge Mode"}
+              </span>
+            </div>
+
+            <p className="text-slate-300 text-sm border-l-2 border-indigo-500 pl-3 mt-2">
+              <span className="font-bold text-white">Goal: </span> 
+              {CHALLENGES[activeChallenge].goal}
+            </p>
+          </div>
           <div className="flex flex-col mb-4 gap-3">
             <h2 className="font-bold text-emerald-400 whitespace-nowrap">Source Code</h2>
             
