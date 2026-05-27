@@ -58,6 +58,13 @@ export default function Home() {
       color: "from-cyan-400 to-blue-500",
       icon: "🔤"
     },
+    {
+      title: "Linked Lists (Data Structures)",
+      desc: "Visualize the insertion and deletion operations in a singly linked list.",
+      path: "/linked-lists",
+      color: "from-cyan-400 to-blue-500",
+      icon: "🔗"
+    },
   ];
 
   return (
